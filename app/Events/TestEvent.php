@@ -17,13 +17,17 @@ class TestEvent implements ShouldBroadcastNow
 
     public $message = '';
     public $user;
+    public $channel_name;
+    public $user_id;
     /**
      * Create a new event instance.
      */
-    public function __construct($message, $user)
+    public function __construct($message, $user, $channel_name, $user_id)
     {
         $this->message = $message;
         $this->user = $user;
+        $this->channel_name = $channel_name;
+        $this->user_id = $user_id;
     }
 
     /**
@@ -31,24 +35,26 @@ class TestEvent implements ShouldBroadcastNow
      *
      * @return array<int, \Illuminate\Broadcasting\Channel>
      */
-    public function broadcastOn(): array
+    public function broadcastOn(): array //name of channel
     {
         // return [
         //     new PrivateChannel('channel-name'),
         // ];
-        return ['test-channel'];
+        return ["{$this->channel_name}"]; //name of channel 
     }
 
     public function broadcastAs()
     {
-        return 'test-event';
+        return 'send.event'; //name of event 
     }
 
     public function broadcastWith()
     {
         return  [
-            'messagea' => $this->message,
-            'user' => $this->user
-        ];
+            'message' => $this->message,
+            'user' => $this->user,
+            'user_id' => $this->user_id,
+            'channel_name' => $this->channel_name
+        ]; //after working any fun that calling this event will send message reverse
     }
 }
