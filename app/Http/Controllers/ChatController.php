@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MessageEvent;
 use App\Events\TestEvent;
 use App\Http\Requests\GetChatRequest;
 use App\Http\Requests\StoreChatRequest;
@@ -25,6 +26,6 @@ class ChatController extends Controller
 
         $user = $request->user();
 
-        broadcast(new TestEvent($message, $user, $channel_name, $request->user_id));
+        broadcast(new MessageEvent($message, $user, $channel_name, $request->user_id));
     }
 }
