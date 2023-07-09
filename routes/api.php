@@ -35,3 +35,6 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/validation', [ValidationController::class, 'validation']);
 
 Route::get('/temp/image', [ValidationController::class, 'temp_image']);
+
+
+Route::post('/store/multi/image', [ValidationController::class, 'store_multi_image']);
