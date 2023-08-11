@@ -27,13 +27,5 @@ class FirebaseNotificationController extends Controller
             "Hello message from Dushanbe",
             $all_fcm_tokens,
         ));
-
-
-        //you can send mail notification using only one user  
-        // $customer->notify(new MailNotification("Hello title", "Hello message"));
-
-
-        //also you can send mail notification like this
-        // Notification::route('mail', $customer->email)->notify(new MailNotification("Hello title", "Hello message", $fmc_tokens));
     }
 }
