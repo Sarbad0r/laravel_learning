@@ -12,6 +12,12 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    //HasApiTokens -> is for creating tokens 
+
+    //hasfactory -> is for creating random data in table using factories
+
+    //Notifiable -> is for sending message or email message to user
+
     protected $table = 'users';
 
     protected $guarded = ['id'];

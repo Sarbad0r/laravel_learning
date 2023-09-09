@@ -18,12 +18,18 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
+            'user_name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
+            'login' => fake()->text(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-            'remember_token' => Str::random(10),
+            // 'remember_token' => Str::random(10),
+            'created_at' => fake()->dateTime(),
+
         ];
+
+        //for running factories with tinker at first run  "php artisan tinker"
+        
+        //then, "User::factory()->times(25)->create();"
     }
 
     /**

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\LaravelSanctumLearningController;
 use App\Http\Controllers\ValidationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -31,10 +32,15 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
-
 Route::post('/validation', [ValidationController::class, 'validation']);
-
 Route::get('/temp/image', [ValidationController::class, 'temp_image']);
-
-
 Route::post('/store/multi/image', [ValidationController::class, 'store_multi_image']);
+Route::get('/create/delete-table-factory', [LaravelSanctumLearningController::class, 'createFactories']);
+
+Route::group(["middleware" => 'auth:sanctum', 'prefix' => 'laravel-sanctum'], function () {
+    Route::get('/route/success', [LaravelSanctumLearningController::class, 'returnSuccess']);
+    Route::get('/route/error', [LaravelSanctumLearningController::class, 'returnError']);
+   
+});
+
+Route::get('/route/get/resources-deleted-table', [LaravelSanctumLearningController::class, 'get_delete_models_resources']);
