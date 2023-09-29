@@ -56,4 +56,19 @@ class User extends Authenticatable
     // protected $casts = [
     //     'email_verified_at' => 'datetime',
     // ];
+
+
+    // "self" uses in static methods of class
+    // to get static fields or some static things of class
+    static public function get_users_with_updated_at_in_static_method()
+    {
+        return self::whereNotNull('updated_at');
+    }
+
+    // "$this" is the same class, usually it uses in simple not static methods
+    // we can use here "self" too, but it not properly.
+    public function get_users_with_updated_at_in_simple_func()
+    {
+        return $this->whereNotNull('updated_at');
+    }
 }
