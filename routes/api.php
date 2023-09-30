@@ -40,7 +40,8 @@ Route::get('/create/delete-table-factory', [LaravelSanctumLearningController::cl
 Route::group(["middleware" => 'auth:sanctum', 'prefix' => 'laravel-sanctum'], function () {
     Route::get('/route/success', [LaravelSanctumLearningController::class, 'returnSuccess']);
     Route::get('/route/error', [LaravelSanctumLearningController::class, 'returnError']);
-   
 });
 
 Route::get('/route/get/resources-deleted-table', [LaravelSanctumLearningController::class, 'get_delete_models_resources']);
+
+Route::get('/checker', [LaravelSanctumLearningController::class, 'laravel_collections']);

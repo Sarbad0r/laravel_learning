@@ -70,4 +70,31 @@ class LaravelSanctumLearningController extends Controller
         //static methods can be call too
         $object_of_class->get_users_with_updated_at_in_static_method();
     }
+
+
+    public function laravel_collections()
+    {
+        $users = User::get();
+
+        $deleted_tables = DeleteModel::get();
+
+
+        //to concat two tables use ->concat($table_variable)
+        $concat = $deleted_tables->concat($users);
+
+
+
+        //to sort something with "asc" use just "->sortBy(field)" and for "desc" use "->sortByDesc('field')" and do not forget to use "->values()" at the end for getting whole list not 
+        //map of collections
+
+        $sorted = $concat->sortBy('id')->values();
+
+
+        //with map you can create new fields or create add value to field. Change them at all.
+        $sorted->map(function ($item, int $key) {
+            return $item->new_value = $key / 2 == 0 ? true : false;
+        });
+
+        return response()->json(['res' => $sorted]);
+    }
 }
