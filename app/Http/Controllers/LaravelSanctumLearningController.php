@@ -74,27 +74,144 @@ class LaravelSanctumLearningController extends Controller
 
     public function laravel_collections()
     {
-        $users = User::get();
 
-        $deleted_tables = DeleteModel::get();
+        // the "all()" method returns the array of collections
+        $all = User::all();
 
+        // the "average('field')" method returns the middle value of something through given key
+        // if you have array of values -> [10,10,20,40] if returns 20. (10 + 10 + 10 + 40) / 4
+        // 4 is the array length 
+        $average = User::average('id');
 
-        //to concat two tables use ->concat($table_variable)
-        $concat = $deleted_tables->concat($users);
-
-
-
-        //to sort something with "asc" use just "->sortBy(field)" and for "desc" use "->sortByDesc('field')" and do not forget to use "->values()" at the end for getting whole list not 
-        //map of collections
-
-        $sorted = $concat->sortBy('id')->values();
+        //also you can write average like thie method down below
+        $avg = User::avg('id');
 
 
-        //with map you can create new fields or create add value to field. Change them at all.
-        $sorted->map(function ($item, int $key) {
-            return $item->new_value = $key / 2 == 0 ? true : false;
+        //The "chunk()" method breaks the collection into multiple, smaller collections of a given size
+        //you should you use it after getting array of collections 
+        $chunk = User::get()->chunk(2);
+
+
+        // the "collapse()" method collect several arrays into one array
+        $user_limit_10 = User::get()->take(10);
+        $user_limit_5 = User::get()->take(5);
+        $collections_of_users = collect([$user_limit_10, $user_limit_5]);
+        $collapse = $collections_of_users->collapse();
+        ////
+
+
+        // method "collect()" return new copy of collections with the items currently in the collection:
+        $collect = $collapse->collect();
+
+
+        // method "concat()" addes all array or collection's values to the end of another array
+        // this method combines two or more tables values
+        $another_table = DeleteModel::get();
+        $concat = $another_table->concat($all);
+
+
+
+        // method "contains()" returns false or true by checking something in it
+        $contains = $all->contains(function ($value, int $index) {
+            return $value->user_name == 'Zena Hickle'; //true
+        });
+        //also there is another method same like "contains()" method but that checks everything 
+        //very strictly -> (жестко)
+        $contains_strictly = $all->containsStrict(function ($value, int $index) {
+            return $value->user_name == 'Zena Hickle'; //true
+        });
+        //also there is another opposite method for checking values
+        $doesnt_contain = $all->doesntContain(function ($value, int $index) {
+            return $value->user_name == 'Zena Hickle'; //false, because it contains value
         });
 
-        return response()->json(['res' => $sorted]);
+
+        //to get length of array or collections use -> "count()"
+        $count = $all->count();
+
+
+        //method "each()" iterates every element in array
+        $each = $all->each(function ($item, $index) {
+            $item->some_value = $index + 1;
+        });
+        //or if you want to delete something
+        // $each_methods = $all->collect()->each(function ($item, int $index) {
+        //     unset($item['created_at'], $item['updated_at']);
+        // });
+        //
+
+
+        //method "every()" checks whether every element equals to something. It returns false or true
+        $every = $all->every(function ($item, $key) {
+            return $item->some_value == 1;
+        });
+
+
+        // method "filter()" filters collection and return those element which pass a given truth test
+        // it gives us object with keys that is why you should to use "->values()" to give only values
+        $filter = $all->filter(function ($item, $index) {
+            return $item->some_value > 10;
+        })->values();
+
+
+        // method "firstWhere()" return first collection from list of collections using "where" checker
+        $first_whrere = $all->firstWhere('some_value', 10);
+
+
+
+        // it gets every field of object in array and makes from them string
+        // for example if you have name in object and object is in array 
+        // -> "Zena Hickle, Fleta Spencer Sr., Gerald Pfeffer, Keegan Kemmer,"
+        //like "join(', ')" in Dart
+        $implode = $all->implode('user_name', ', ');
+
+
+        //checks whether array is empty
+        $is_empty = $all->isEmpty();
+
+
+        //check whether array is not empty
+        $is_not_empty = $all->isNotEmpty();
+
+
+        //keyBy
+        $keyBy = $all->keyBy('id');
+
+
+        //method "keys()" gets keys and put them into array from key-value data
+        $keys = $keyBy->keys();
+
+
+        // method last return last element from array of collections
+
+        $last = $all->last();
+
+        //also you can write last as function and it returns last element which is true
+        $last_method = $all->last(function ($item, int $index) {
+            return $item->some_value >= 10 && $item->some_value <= 15;
+        });
+
+
+        //"map()" also does same thing as "each()" method. But unlike "each()" it should return something after changing or doing some stuff.
+        $map = $all->map(function ($item, int $index) {
+            $item->new_value = $index / 2 == 0 ? 1 : 0;
+            return $item;
+        })->all();
+
+
+        $users = User
+            ::leftJoin('delete_table', 'users.id', 'delete_table.user_id')
+            ->get();
+
+        $users->map(function ($item) {
+            $item->any = true;
+        });
+
+        $check_whether_all_user_has_created_at = $users->every(function ($item) {
+            return $item->created_at;
+        });
+
+
+        return $check_whether_all_user_has_created_at;
     }
 }
