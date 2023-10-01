@@ -75,6 +75,23 @@ class LaravelSanctumLearningController extends Controller
     public function laravel_collections()
     {
 
+
+        //В Laravel, методы get и all используются для получения данных из базы данных, но они имеют некоторые различия:
+
+        // get:
+        // get является методом объекта запроса (QueryBuilder), и его обычно используют вместе с методами для построения запросов, такими как select, where, orderBy и так далее.
+        // get возвращает коллекцию (обычно Illuminate\Support\Collection), содержащую результаты запроса.
+        // Обычно вы будете использовать get для выполнения сложных запросов к базе данных.
+
+
+        //all:
+        // all является методом Eloquent модели и используется, когда у вас уже есть экземпляр модели и вы хотите получить все записи для этой модели без дополнительных условий.
+        // all возвращает коллекцию Eloquent моделей.
+
+
+        //основное различие заключается в том, что get используется для выполнения запросов и возвращает коллекцию, тогда как all используется для получения всех записей для конкретной модели и также возвращает коллекцию моделей.
+
+
         // the "all()" method returns the array of collections
         $all = User::all();
 
@@ -201,6 +218,7 @@ class LaravelSanctumLearningController extends Controller
 
         $users = User
             ::leftJoin('delete_table', 'users.id', 'delete_table.user_id')
+            ->where('created_at', '<', date('Y-m-d'))
             ->get();
 
         $users->map(function ($item) {
@@ -212,6 +230,7 @@ class LaravelSanctumLearningController extends Controller
         });
 
 
-        return $check_whether_all_user_has_created_at;
+
+        return $users->isEmpty();
     }
 }
