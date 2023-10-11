@@ -66,7 +66,7 @@ class User extends Authenticatable
     }
 
     // "$this" is the same class, usually it uses in simple not static methods
-    // we can use here "self" too, but it not properly.
+    // we can use here "self" too, but it's not properly.
     public function get_users_with_updated_at_in_simple_func()
     {
         return $this->whereNotNull('updated_at');

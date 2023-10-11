@@ -102,12 +102,12 @@ class LaravelSanctumLearningController extends Controller
         // 4 is the array length 
         $average = User::average('id');
 
-        //also you can write average like thie method down below
+        //also you can write average like this method down below
         $avg = User::avg('id');
 
 
         //The "chunk()" method breaks the collection into multiple, smaller collections of a given size
-        //you should you use it after getting array of collections 
+        //you should use it after getting array of collections 
         $chunk = User::get()->chunk(2);
 
 
@@ -230,8 +230,6 @@ class LaravelSanctumLearningController extends Controller
         $check_whether_all_user_has_created_at = $users->every(function ($item) {
             return $item->created_at;
         });
-
-
 
         return $users->isEmpty();
     }
