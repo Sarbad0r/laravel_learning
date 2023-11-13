@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\DeleteModelResource;
+use App\Models\CustomerInvoiceModel;
+use App\Models\CustomerModle;
 use App\Models\DeleteModel;
 use App\Models\User;
 use App\Traits\HttpResponses;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class LaravelSanctumLearningController extends Controller
 {
@@ -89,9 +93,9 @@ class LaravelSanctumLearningController extends Controller
         // all возвращает коллекцию Eloquent моделей.
 
 
-        //основное различие заключается в том, что get используется для выполнения запросов и 
+        // основное различие заключается в том, что get используется для выполнения запросов и 
         // возвращает коллекцию, тогда как all используется для получения всех записей для
-        //  конкретной модели и также возвращает коллекцию моделей.
+        // конкретной модели и также возвращает коллекцию моделей.
 
 
         // the "all()" method returns the array of collections
@@ -199,6 +203,7 @@ class LaravelSanctumLearningController extends Controller
 
         //method "keys()" gets keys and put them into array from key-value data
         $keys = $keyBy->keys();
+        // you can also get values using "->values()" property
 
 
         // method last return last element from array of collections
@@ -232,5 +237,109 @@ class LaravelSanctumLearningController extends Controller
         });
 
         return $users->isEmpty();
+    }
+
+
+    public function collection_average()
+    {
+
+        $customer_invoice = CustomerInvoiceModel::average('qty');
+
+        $specific_customer_total_average = CustomerInvoiceModel
+            ::where('customer_id', 4)
+            ->average("total");
+
+
+        return $specific_customer_total_average;
+    }
+
+
+    // this function is similar to "concatinate_two_tables_and_do_some_code()" function
+    public function method_collaps()
+    {
+        // sending id
+        $customer_invoice = CustomerInvoiceModel::get_only_specific_customer_invoices(4);
+
+        //sending id
+        $customers = CustomerModle::get_speciffic_customer(4);
+
+
+        $collect = collect([$customer_invoice, $customers]);
+
+        // here combine two arrays
+        $collapse = $collect->collapse();
+
+
+        //this gives us key value 
+        $get_total_using_filter = $collapse->filter(function ($item, $index) {
+            return $item->total && $item->total > 50;
+        });
+
+        // get only values
+        $get_total_using_filter = $get_total_using_filter->values();
+
+        return $get_total_using_filter;
+    }
+
+
+    //this function is similar to "method_collaps()" function
+    public function concatinate_two_tables_and_do_some_code()
+    {
+        // sending id
+        $customer_invoice = CustomerInvoiceModel::get_only_specific_customer_invoices(4);
+
+        //sending id
+        $customers = CustomerModle::get_speciffic_customer(4);
+
+        // return $customers;
+
+        $concate = $customers->concat($customer_invoice);
+
+
+        //this gives us key value 
+        $get_total_using_filter = $concate->filter(function ($item, $index) {
+            return $item->total && $item->total > 50;
+        });
+
+        // get only values
+        $get_total_using_filter = $get_total_using_filter->values();
+
+
+        return $get_total_using_filter;
+    }
+
+    public function contain_and_every_methods()
+    {
+        $customer_invoices = CustomerInvoiceModel::get_only_specific_customer_invoices(4);
+
+        $every =  $customer_invoices->every(function ($item, $index) {
+            return $item->status == '-Выполнен-';
+        });
+
+
+        $contains = $customer_invoices->contains(function ($item, $index) {
+            return $item->invoice_date == '2024-08-01';
+        });
+
+        return response([
+            'every' => $every,
+            'contains' => $contains,
+            'invoice' => $customer_invoices
+        ]);
+    }
+
+    public function each_and_map_methods()
+    {
+        $customer_invoice = CustomerInvoiceModel::get_only_specific_customer_invoices(4);
+
+        $customer_invoice->map(function ($item, $index) {
+            return $item->first_added_field = "$index 1";
+        });
+
+        $customer_invoice->each(function ($item, $index) {
+            return $item->second_added_field = "$index 1";
+        });
+
+        return $customer_invoice;
     }
 }

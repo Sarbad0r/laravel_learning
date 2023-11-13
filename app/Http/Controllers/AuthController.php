@@ -166,4 +166,9 @@ class AuthController extends Controller
 
 
     }
+
+    public function get_video()
+    {
+        return response()->file(storage_path('/app/videos/bee.mp4'));
+    }
 }
