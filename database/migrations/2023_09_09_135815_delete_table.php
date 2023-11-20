@@ -11,25 +11,28 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('delete_table', function (Blueprint $table) {
-            $table->id();
 
-            $table->unsignedBigInteger('user_id')->nullable();
+        if (!Schema::hasTable('delete_table')) {
+            Schema::create('delete_table', function (Blueprint $table) {
+                $table->id();
 
-            $table->foreign('user_id')
-                ->references('id')
-                ->on('users')
-                ->onUpdate('cascade')
-                ->onDelete('set null');
+                $table->unsignedBigInteger('user_id')->nullable();
 
-            $table->string('string')->nullable();
-            $table->integer('integer')->nullable();
-            $table->boolean('boolean')->nullable();
-            $table->double('double')->nullable();
-            $table->dateTime('dateTime')->nullable();
-            $table->date('date')->nullable();
-            $table->time('time')->nullable();
-        });
+                $table->foreign('user_id')
+                    ->references('id')
+                    ->on('users')
+                    ->onUpdate('cascade')
+                    ->onDelete('set null');
+
+                $table->string('string')->nullable();
+                $table->integer('integer')->nullable();
+                $table->boolean('boolean')->nullable();
+                $table->double('double')->nullable();
+                $table->dateTime('dateTime')->nullable();
+                $table->date('date')->nullable();
+                $table->time('time')->nullable();
+            });
+        }
     }
 
     /**

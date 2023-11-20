@@ -20,6 +20,12 @@ class User extends Authenticatable
 
     protected $table = 'users';
 
+    // The primary key associated with the table.
+    protected $primaryKey = "id";
+
+    // if you want to create UUID instead of creating autoincrementing id:
+    // check out this link -> https://laravel.com/docs/10.x/eloquent#uuid-and-ulid-keys
+
     protected $guarded = ['id'];
 
     public function chats()

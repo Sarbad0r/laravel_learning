@@ -11,6 +11,9 @@ class CustomerInvoiceModel extends Model
 
     protected $table = 'customer_invoice';
 
+    // The primary key associated with the table.
+    protected $primaryKey = "id";
+
     static $specific_fields = [
         'id', 'customer_id', 'status',
         'qty', 'total', 'invoice_datetime', 'invoice_datetime',
@@ -29,5 +32,10 @@ class CustomerInvoiceModel extends Model
         // when you want to use other static function with your request 
         // first use that functions then your request 
         return self::get_with_fields()->where('customer_id', $id)->values();
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo(CustomerModle::class, 'customer_id');
     }
 }

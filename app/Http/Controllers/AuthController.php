@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
@@ -169,6 +170,7 @@ class AuthController extends Controller
 
     public function get_video()
     {
+        throw 1;
         return response()->file(storage_path('/app/videos/bee.mp4'));
     }
 }

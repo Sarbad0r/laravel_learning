@@ -76,6 +76,144 @@ class LaravelSanctumLearningController extends Controller
     }
 
 
+    public function create_token()
+    {
+
+        // to change token expiration datetime go -> config/sunctum.php
+        //
+        //https://laravel.com/docs/10.x/sanctum#token-expiration  
+
+        $customer = CustomerModle::first();
+
+        $token = $customer->createToken("TOKEN_NAME")->plainTextToken;
+
+        return response()->json(['token' => $token]);
+    }
+
+    public function create_token_with_ability()
+    {
+        $customer = CustomerModle::first();
+
+        // token ability: for ex: you have just simple users and pro users
+        // simple users will not have ability to request or do something if the have not ability
+        // you can write abilitis in array
+        // for convenience, other token which will be created without abilities will return "true" by default
+        // we can say that this ability will work only for current created token, other tokens will return true by default
+
+        // that is why if you will you this, you should delete previous tokens and set new one
+
+        // https://laravel.com/docs/10.x/sanctum#token-abilities
+
+        $token = $customer->createToken("TOKEN_NAME", [
+            'any:ability',
+            'any:other-ability'
+        ])->plainTextToken;
+
+        return response()->json(['token' => $token]);
+    }
+
+    public function all_user_tokens(Request $request)
+    {
+        $user = $request->user();
+
+        return $user->tokens;
+    }
+
+    public function token_can_do_any_abilities(Request $request)
+    {
+        if ($request->user()->tokenCan('any:ability')) {
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
+
+    public function deleting_tokens(Request $request)
+    {
+        // for deleting all tokens;
+        $request->user()->delete();
+
+        // for deleting current sending token through the bearer token 
+        $request->user()->currentAccessToken()->delete();
+
+        // and if you want to delete specific token use this one:
+
+        $tokenId = 100;
+        $request->user()->tokens()->where('id', $tokenId)->delete();
+    }
+
+    public function update_than_get_freshed_data()
+    {
+        $customer = CustomerModle::where('id', 5)->first();
+
+        CustomerModle::where('id', 5)->update(['first_name' => "ok3"]);
+
+        return $customer->fresh();
+    }
+
+    public function get_rejecting_some_collection()
+    {
+        $customers = CustomerModle::get();
+
+        $customers = $customers->reject(function (CustomerModle $item) {
+            return $item->first_name == 'Avaz';
+        });
+
+        // return CustomerModle::firstWhere('id', 1);
+
+        return $customers->values();
+    }
+
+
+    public function check_if_model_changed_during_code()
+    {
+        $customer = CustomerModle::find(2);
+
+        // if model will be changed during code
+        $customer->update([
+            'first_name' => "Avaz"
+        ]);
+
+        // this wasChanged() model's function will check if model changed in code
+        $has_changed = $customer->wasChanged();
+
+        // if you want to check current field
+        // check like this
+        // you can pass an array of fields
+        $field_changed = $customer->wasChanged(['first_name']);
+
+        return response()->json(['is_changes' => $has_changed, 'field_changed' => $field_changed]);
+    }
+
+
+    public function get_original_after_changing()
+    {
+        // if you changed some model during code and but you want to get 
+        // the original data of model
+
+        $customer = CustomerModle::find(2);
+
+        $customer->first_name = 'avaz';
+
+        $original_after_changing = $customer->getOriginal();
+
+        return response()->json(['customer' => $original_after_changing]);
+    }
+
+    public function deleting_models()
+    {
+        // all about deleting models
+        // you can find here:
+        // https://laravel.com/docs/10.x/eloquent#deleting-models
+
+        CustomerModle::where('id', 2)->delete();
+    }
+
+    public function customer_invoices()
+    {
+        return CustomerModle::where('id', 2)->with('customer_invoices')->first();
+    }
+
     public function laravel_collections()
     {
 

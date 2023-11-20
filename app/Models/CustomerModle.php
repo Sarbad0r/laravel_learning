@@ -4,13 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class CustomerModle extends Model
 {
-    use HasFactory;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     protected $table = "customers";
 
+
+    // The primary key associated with the table.
+    protected $primaryKey = "id";
+
+    protected $guarded = ['id'];
 
     static $customer_primary_fields =
     [
@@ -32,5 +40,10 @@ class CustomerModle extends Model
         if (!$id) return null;
 
         return self::get_with_fields()->where('id', $id)->values();
+    }
+
+    public function customer_invoices()
+    {
+        return $this->hasMany(CustomerInvoiceModel::class, 'customer_id');
     }
 }
