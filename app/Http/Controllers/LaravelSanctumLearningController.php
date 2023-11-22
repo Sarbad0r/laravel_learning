@@ -8,9 +8,11 @@ use App\Models\CustomerModle;
 use App\Models\DeleteModel;
 use App\Models\User;
 use App\Traits\HttpResponses;
+use Bepsvpt\Blurhash\Facades\BlurHash;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class LaravelSanctumLearningController extends Controller
 {
@@ -212,6 +214,21 @@ class LaravelSanctumLearningController extends Controller
     public function customer_invoices()
     {
         return CustomerModle::where('id', 2)->with('customer_invoices')->first();
+    }
+
+
+    public function image_blur_hash()
+    {
+        $img = Image::make(storage_path('app/images/image_60f75wckinZyM4pRpaBmP5upy.jpg'));
+
+        $blured = BlurHash::encode($img);
+
+        return $blured;
+    }
+
+    public function image_url()
+    {
+        return response()->file(storage_path('app/images/image_60f75wckinZyM4pRpaBmP5upy.jpg'));
     }
 
     public function laravel_collections()

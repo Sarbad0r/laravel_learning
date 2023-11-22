@@ -80,6 +80,16 @@ Route::get('/customer-invoices', [
     'customer_invoices'
 ]);
 
+Route::get('/image/blured', [
+    LaravelSanctumLearningController::class,
+    'image_blur_hash'
+]);
+
+Route::get('/image/url', [
+    LaravelSanctumLearningController::class,
+    'image_url'
+]);
+
 
 //create token apis
 Route::get('create-token', [LaravelSanctumLearningController::class, 'create_token']);
