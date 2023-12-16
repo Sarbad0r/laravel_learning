@@ -157,3 +157,8 @@ Route::get('/send-topic-url', [
     FirebaseTopicController::class,
     'send_topic'
 ]);
+
+Route::get('/collect-several-array-of-collections', [
+    LaravelSanctumLearningController::class,
+    'collect_several_array_of_collections'
+]);

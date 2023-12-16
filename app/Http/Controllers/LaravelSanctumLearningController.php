@@ -497,4 +497,9 @@ class LaravelSanctumLearningController extends Controller
 
         return $customer_invoice;
     }
+
+    public function collect_several_array_of_collections()
+    {
+        
+    }
 }
