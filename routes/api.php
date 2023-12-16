@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\LaravelSanctumLearningController;
+use App\Http\Controllers\notifications\firebase_notification\FirebaseTopicController;
 use App\Http\Controllers\notifications\mail_notification\MailController;
 use App\Http\Controllers\notifications\telegram_notification\TelegramNotificationController;
 use App\Http\Controllers\ValidationController;
@@ -151,3 +152,8 @@ Route::group(['prefix' => 'collections'], function () {
         'mail_notification'
     ]);
 });
+
+Route::get('/send-topic-url', [
+    FirebaseTopicController::class,
+    'send_topic'
+]);

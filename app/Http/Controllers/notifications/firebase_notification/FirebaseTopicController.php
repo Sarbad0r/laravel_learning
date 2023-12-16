@@ -17,11 +17,12 @@ class FirebaseTopicController extends Controller
 
         $messaging = $factory->createMessaging();
 
-        $notification = [
+        $notification = json_encode([
             'weather' => 1,
             "type" => "C",
             "city" => "Dushanbe"
-        ];
+        ]);
+
 
         $message = CloudMessage
             ::withTarget('topic', 'name_of_your_any_topic')
