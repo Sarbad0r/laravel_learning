@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MessageEvent;
 use App\Http\Resources\DeleteModelResource;
 use App\Models\CustomerInvoiceModel;
 use App\Models\CustomerModle;
@@ -19,6 +20,13 @@ class LaravelSanctumLearningController extends Controller
     use HttpResponses; //for using our "trait" file which is placed in app/Traits/HttpResponses
     //we will use that trais using "$this" keyword
 
+
+    public function sendMessage()
+    {
+        $message = new MessageEvent("hello what's up", 'avaz', "always_flutter", 1);
+
+        event($message);
+    }
 
 
     public function returnSuccess()
@@ -500,6 +508,5 @@ class LaravelSanctumLearningController extends Controller
 
     public function collect_several_array_of_collections()
     {
-        
     }
 }

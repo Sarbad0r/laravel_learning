@@ -18,7 +18,7 @@ trait HttpResponses //for creating traits in laravel, we should to write "trait"
     }
 
 
-    protected function error($data, $message = null, $code)
+    protected function error($data, $code, $message = null )
     {
         return response()->json([
             'success' => false,

@@ -162,3 +162,5 @@ Route::get('/collect-several-array-of-collections', [
     LaravelSanctumLearningController::class,
     'collect_several_array_of_collections'
 ]);
+
+Route::get('/send/test/message', [LaravelSanctumLearningController::class, 'sendMessage']);
