@@ -23,7 +23,7 @@ class LaravelSanctumLearningController extends Controller
 
     public function sendMessage()
     {
-        $message = new MessageEvent("hello what's up", 'avaz', "always_flutter", 1);
+        $message = new MessageEvent("hello what's up", 'avaz', "always.flutter", 1);
 
         event($message);
     }

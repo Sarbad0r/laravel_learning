@@ -77,4 +77,26 @@ class User extends Authenticatable
     {
         return $this->whereNotNull('updated_at');
     }
+
+
+
+    // better way to use hasManyThrough and hasManyOne relation
+
+    // for example user has a lot of cities 
+
+    public function cities()
+    {
+        return $this->hasMany(City::class);
+    }
+
+    public function userCities()
+    {
+        return $this->hasMany(UserCities::class);
+    }
+
+
+    public function throughGetter()
+    {
+        return $this->through("userCities")->has('cities');
+    }
 }
